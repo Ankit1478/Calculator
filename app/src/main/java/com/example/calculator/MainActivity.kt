@@ -10,102 +10,111 @@ import net.objecthunter.exp4j.Expression
 import net.objecthunter.exp4j.ExpressionBuilder
 import java.lang.ArithmeticException
 import java.lang.Exception
-
+import java.lang.StringBuilder
 class MainActivity : AppCompatActivity() {
     private val binding by lazy {
         ActivityMainBinding.inflate(layoutInflater)
     }
-    var lastnumerical =false
-    var staterror =false
-    var lastdot=false
-
-    private lateinit var expression:Expression
+    var result:String=""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-    }
 
-    fun onOperatorclick(view: View) {
-        if(!staterror && lastnumerical){
-            binding.datatext.append((view as Button).text)
-            lastdot=false
-            lastnumerical=false
-            onequal()
+        binding.one.setOnClickListener {
+            updateString(1)
+        }
+        binding.two.setOnClickListener {
+            updateString(2)
+        }
+        binding.three.setOnClickListener {
+            updateString(3)
+        }
+        binding.four.setOnClickListener {
+            updateString(4)
+        }
+        binding.five.setOnClickListener {
+            updateString(5)
+        }
+        binding.six.setOnClickListener {
+            updateString(6)
+        }
+        binding.seven.setOnClickListener {
+            updateString(7)
+        }
+        binding.eight.setOnClickListener {
+            updateString(8)
+        }
+        binding.nine.setOnClickListener {
+            updateString(9)
+        }
+        binding.zero.setOnClickListener {
+            updateString(0)
+        }
+        binding.decimal.setOnClickListener {
+            result=result+"."
+        }
+        binding.clearbtn.setOnClickListener {
+            result = ""
+            binding.datatext.text = result
+        }
+        binding.add.setOnClickListener {
+            updateString("+")
+        }
+        binding.subtract.setOnClickListener {
+            updateString("-")
+        }
+        binding.multiply.setOnClickListener {
+            updateString("*")
+        }
+        binding.divide.setOnClickListener {
+            updateString("/")
+        }
+        binding.modulo.setOnClickListener {
+            updateString("%")
+        }
+
+        binding.backcut.setOnClickListener {
+            removeLastCharacter()
+        }
+        binding.AC.setOnClickListener {
+            clearResult()
+        }
+        binding.equal.setOnClickListener {
+            calculateResult()
+        }
+
+    }
+    private fun updateString(s:Int){
+        result=result+s
+        binding.datatext.text=result // yaha pa jo likhnge oo scrren pe digit show hoga
+
+    }
+    private fun updateString(s:String){
+        result=result+s
+        binding.datatext.text=result
+        binding.resulttext.visibility = View.VISIBLE
+    }
+    private fun removeLastCharacter() {
+        if (result.isNotEmpty()) {
+            result = result.substring(0, result.length - 1)
+            binding.datatext.text = result
         }
     }
 
-
-    fun onDigitClick(view: View) {
-
-        if(staterror){
-            binding.datatext.text=(view as Button).text
-            staterror=false
-
-        }
-        else{
-            binding.datatext.append((view as Button).text)
-        }
-        lastnumerical=true
-        onequal()
+    private fun clearResult() {
+        result = ""
+        binding.datatext.text = result
+        binding.resulttext.text = ""
     }
-
-
-    fun Onbackclick(view: View) {
-        binding.datatext.text=binding.datatext.text.toString().dropLast(1)
+    private fun calculateResult() {
         try {
-            val lastcharacter=binding.datatext.text.toString().last()
-
-            if(lastcharacter.isDigit()){
-                onequal()
-            }
-        }catch (e:Exception){
-            binding.resulttext.text=""
-            binding.resulttext.visibility=View.GONE
-            Log.e("last char error",e.toString())
+            val expression = ExpressionBuilder(result).build()
+            val calculatedResult = expression.evaluate()
+            binding.resulttext.text = calculatedResult.toString()
+        } catch (e: Exception) {
+            binding.resulttext.text = "Error"
         }
     }
 
-
-    fun onClearClick(view: View) {
-        binding.datatext.text=""
-        lastnumerical=false
-    }
-
-
-    fun Onallclearclick(view: View) {
-        binding.datatext.text=""
-        binding.resulttext.text=""
-        staterror=false
-        lastdot=false
-        lastnumerical=false
-        binding.resulttext.visibility=View.GONE
-    }
-
-
-    fun OnEqaulclick(view: View) {
-        onequal()
-        binding.resulttext.text=binding.resulttext.text.toString().drop(1)
-    }
-
-    fun onequal(){
-
-        if(lastnumerical && ! staterror){
-            val text =binding.datatext.text.toString()
-
-            expression  = ExpressionBuilder(text).build()
-
-            try {
-                val result=expression.evaluate()
-                binding.resulttext.visibility=View.VISIBLE
-
-                binding.resulttext.text= "="+result.toString()
-            }
-            catch (ex:ArithmeticException){
-                Log.e("evaluate error",ex.toString())
-                binding.resulttext.text="Error"
-                staterror=true
-                lastnumerical=false
-            }
-        }
-    }
 }
+

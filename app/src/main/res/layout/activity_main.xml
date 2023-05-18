@@ -13,7 +13,7 @@
         android:layout_marginEnd="12dp"
         android:textAlignment="textEnd"
         android:textColor="@color/black"
-        android:textSize="28dp"
+        android:textSize="28sp"
         app:layout_constraintBottom_toTopOf="@id/resulttext"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -25,7 +25,7 @@
         android:layout_marginEnd="12dp"
         android:textAlignment="textEnd"
         android:textColor="#706E6E"
-        android:textSize="28dp"
+        android:textSize="28sp"
         android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@id/line"
         app:layout_constraintEnd_toEndOf="parent"
@@ -38,6 +38,16 @@
         android:layout_marginBottom="6dp"
         android:background="@color/linecolor"
         app:layout_constraintBottom_toTopOf="@id/linearlayout" />
+
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical" />
+    </HorizontalScrollView>
 
     <LinearLayout
         android:id="@+id/linearlayout"
@@ -205,11 +215,10 @@
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/equal"
                 style="@style/operatorbtn"
-                android:textColor="@color/white"
                 android:backgroundTint="@color/black"
                 android:onClick="OnEqaulclick"
-                android:text="=" />
-
+                android:text="="
+                android:textColor="@color/white" />
         </LinearLayout>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
